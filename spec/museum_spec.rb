@@ -62,6 +62,7 @@ RSpec.describe Museum do
           dmns.admit(patron_2)
           dmns.admit(patron_3)
           patron_1.add_interest("Gems and Minerals")
+          patron_1.add_interest("IMAX")
           patron_1.add_interest("Dead Sea Scrolls")
           patron_2.add_interest("Dead Sea Scrolls")
           patron_3.add_interest("Dead Sea Scrolls")
@@ -75,7 +76,7 @@ RSpec.describe Museum do
           expected = {
             gems_and_minerals => [patron_1],
             dead_sea_scrolls => [patron_1, patron_2, patron_3],
-            imax => []
+            imax => [patron_1]
           }
           expect(dmns.patrons_by_exhibit_interest).to eq(expected)
 
@@ -87,16 +88,17 @@ RSpec.describe Museum do
 
         it 'can draw for a lottery winner' do
           expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq("Johnny").or eq("Bob")
-          expect(dmns.draw_lottery_winner(imax)).to eq(nil)
+          expect(dmns.draw_lottery_winner(gems_and_minerals)).to eq(nil)
+          expect(dmns.draw_lottery_winner(imax)).to eq("Bob")
         end
 
-        xit 'can announce a lottery winner' do
-          allow(dmns).to recieve(:draw_lottery_winner).and_call_original
+        it 'can announce a lottery winner' do
+          allow(dmns).to receive(:draw_lottery_winner).and_call_original
           allow(dmns).to receive(:draw_lottery_winner).with(dead_sea_scrolls).and_return("Johnny")
 
-          expect(dmns.announce_lottery_winner(imax)).to eq("No winners for this lottery")
-          expect(dmns.announce_lottery_winner(gems_and_minerals)).to eq("Bob has won the IMAX exhibit lottery")
-          expect(dmns.announce_lottery_winner(dead_sea_scrolls)).to eq("Johnny has won the Dead Sea Scrolls lottery")
+          expect(dmns.announce_lottery_winner(gems_and_minerals)).to eq("No winners for this lottery.")
+          expect(dmns.announce_lottery_winner(imax)).to eq("Bob has won the IMAX exhibit lottery.")
+          expect(dmns.announce_lottery_winner(dead_sea_scrolls)).to eq("Johnny has won the Dead Sea Scrolls exhibit lottery.")
         end
 
       end
