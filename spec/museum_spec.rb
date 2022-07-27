@@ -26,7 +26,7 @@ RSpec.describe Museum do
     let(:dead_sea_scrolls) { Exhibit.new({ name: "Dead Sea Scrolls", cost: 10 }) }
     let(:imax) { Exhibit.new({ name: "IMAX", cost: 15 }) }
 
-    xit 'can add an exhibit' do
+    it 'can add an exhibit' do
       dmns.add_exhibit(gems_and_minerals)
       dmns.add_exhibit(dead_sea_scrolls)
       dmns.add_exhibit(imax)
