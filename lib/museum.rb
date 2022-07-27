@@ -24,4 +24,21 @@ class Museum
     end
   end
 
+  def patrons_by_exhibit_interest
+    result = {}
+    @exhibits.each do |exhibit|
+      interested_patrons = @patrons.find_all do |patron|
+        patron.interests.include?(exhibit.name)
+      end
+      result[exhibit] = interested_patrons
+    end
+    result
+  end
+
+  def ticket_lottery_contestants(exhibit)
+    patrons_by_exhibit_interest[exhibit].find_all do |patron|
+      patron.spending_money < exhibit.cost
+    end
+  end
+
 end

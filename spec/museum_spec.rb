@@ -40,7 +40,7 @@ RSpec.describe Museum do
     end
 
     context 'patrons' do
-      let(:patron_1) { Patron.new("Bob", 20) }
+      let(:patron_1) { Patron.new("Bob", 0) }
       let(:patron_2) { Patron.new("Sally", 20) }
       let(:patron_3) { Patron.new("Johnny", 5) }
 
@@ -71,7 +71,7 @@ RSpec.describe Museum do
           expect(dmns.patrons).to eq([patron_1, patron_2, patron_3])
         end
 
-        xit 'can return a hash with patron interested in each exhibit' do
+        it 'can return a hash with patron interested in each exhibit' do
           expected = {
             gems_and_minerals => [patron_1],
             dead_sea_scrolls => [patron_1, patron_2, patron_3],
@@ -81,7 +81,7 @@ RSpec.describe Museum do
 
         end
 
-        xit 'can find contestents for a lottery based on interested patrons who cant afford an exhibit' do
+        it 'can find contestents for a lottery based on interested patrons who cant afford an exhibit' do
           expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
         end
 
