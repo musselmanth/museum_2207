@@ -16,7 +16,7 @@ RSpec.describe Museum do
     end
 
     it 'starts with no exhibits' do
-      exepect(dmns.exhibits).to eq([])
+      expect(dmns.exhibits).to eq([])
     end
 
   end
