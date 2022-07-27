@@ -13,13 +13,9 @@ class Museum
   end
 
   def recommend_exhibits(patron)
-    result = []
-    @exhibits.each do |exhibit|
-      patron.interests.each do |interest|
-        result << exhibit if interest == exhibit.name
-      end
+    @exhibits.find_all do |exhibit|
+      patron.interests.include?(exhibit.name)
     end
-    result
   end
 
 end
