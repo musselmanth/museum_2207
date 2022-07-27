@@ -19,6 +19,10 @@ RSpec.describe Museum do
       expect(dmns.exhibits).to eq([])
     end
 
+    it 'starts with no patrons' do
+      expect(dmns.patrons).to eq([])
+    end
+
   end
 
   context 'exhibits' do
@@ -38,6 +42,7 @@ RSpec.describe Museum do
     context 'patrons' do
       let(:patron_1) { Patron.new("Bob", 20) }
       let(:patron_2) { Patron.new("Sally", 20) }
+      let(:patron_3) { Patron.new("Johnny", 5) }
 
       it 'can recomment exhibits based on patron interests' do
         patron_1.add_interest("Dead Sea Scrolls")
@@ -48,6 +53,53 @@ RSpec.describe Museum do
         expect(dmns.recommend_exhibits(patron_2)).to eq([imax])
       end 
 
+
+
+      context 'lottery' do
+
+        before(:each) do
+          dmns.admit(patron_1)
+          dmns.admit(patron_2)
+          dmns.admit(patron_3)
+          patron_1.add_interest("Gems and Minerals")
+          patron_1.add_interest("Dead Sea Scrolls")
+          patron_2.add_interest("Dead Sea Scrolls")
+          patron_3.add_interest("Dead Sea Scrolls")
+        end
+
+        it 'can admit patrons' do
+          expect(dmns.patrons).to eq([patron_1, patron_2, patron_3])
+        end
+
+        it 'can return a hash with patron interested in each exhibit' do
+          expected = {
+            gems_and_minerals => [patron_1],
+            dead_sea_scrolls => [patron_1, patron_2, patron_3],
+            imax => []
+          }
+          expect(dmns.patrons_by_exhibit_interest).to eq(expected)
+
+        end
+
+        it 'can find contestents for a lottery based on interested patrons who cant afford an exhibit' do
+          expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
+        end
+
+        it 'can draw for a lottery winner' do
+          expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq("Johnny" || "Bob")
+          expect(dmns.draw_lottery_winner(gems)).to eq(nil)
+        end
+
+        it 'can announce a lottery winner' do
+          allow(dmns).to recieve(:draw_lottery_winner).and_call_original
+          allow(dmns).to receive(:draw_lottery_winner).with(dead_sea_scrolls).and_return("Johnny")
+
+          expect(dmns.announce_lottery_winner(imax)).to eq("No winners for this lottery")
+          expect(dmns.announce_lottery_winner(gems_and_minerals)).to eq("Bob has won the IMAX exhibit lottery")
+          expect(dmns.announce_lottery_winner(dead_sea_scrolls)).to eq("Johnny has won the Dead Sea Scrolls lottery")
+        end
+
+      end
     end
   end
 end
