@@ -85,9 +85,9 @@ RSpec.describe Museum do
           expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
         end
 
-        xit 'can draw for a lottery winner' do
-          expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq("Johnny" || "Bob")
-          expect(dmns.draw_lottery_winner(gems)).to eq(nil)
+        it 'can draw for a lottery winner' do
+          expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq("Johnny").or eq("Bob")
+          expect(dmns.draw_lottery_winner(imax)).to eq(nil)
         end
 
         xit 'can announce a lottery winner' do
