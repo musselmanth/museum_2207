@@ -71,7 +71,7 @@ RSpec.describe Museum do
           expect(dmns.patrons).to eq([patron_1, patron_2, patron_3])
         end
 
-        it 'can return a hash with patron interested in each exhibit' do
+        xit 'can return a hash with patron interested in each exhibit' do
           expected = {
             gems_and_minerals => [patron_1],
             dead_sea_scrolls => [patron_1, patron_2, patron_3],
@@ -81,16 +81,16 @@ RSpec.describe Museum do
 
         end
 
-        it 'can find contestents for a lottery based on interested patrons who cant afford an exhibit' do
+        xit 'can find contestents for a lottery based on interested patrons who cant afford an exhibit' do
           expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
         end
 
-        it 'can draw for a lottery winner' do
+        xit 'can draw for a lottery winner' do
           expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq("Johnny" || "Bob")
           expect(dmns.draw_lottery_winner(gems)).to eq(nil)
         end
 
-        it 'can announce a lottery winner' do
+        xit 'can announce a lottery winner' do
           allow(dmns).to recieve(:draw_lottery_winner).and_call_original
           allow(dmns).to receive(:draw_lottery_winner).with(dead_sea_scrolls).and_return("Johnny")
 
